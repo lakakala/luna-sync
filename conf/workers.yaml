@@ -1,0 +1,5 @@
+
+workers:
+  - key: command
+    path: scripts/git.sh
+    
