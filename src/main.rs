@@ -1,7 +1,11 @@
 mod error;
 mod result;
 
-fn main() {
+#[tokio::main]
+async fn main() {
+    let server = HttpExportServer::new();
+
+    server.start().await;
     println!("Hello, world!");
 }
 
@@ -70,23 +74,38 @@ impl HttpExporter {
 
 struct TcpExport {}
 
+use actix_files::NamedFile;
+use actix_web::{HttpResponse, Responder};
 struct HttpExportServer {}
 
 impl HttpExportServer {
+    fn new() -> HttpExportServer {
+        HttpExportServer {}
+    }
+
     async fn start(&self) {
         use actix_web::{App, HttpServer, web};
 
-        HttpServer::new(|| App::new().route("/git/*", web::to(Self::handle_request)))
-            .bind(("127.0.0.1", 8080))
-            .expect("")
-            .run()
-            .await
-            .expect("")
+        HttpServer::new(|| {
+            App::new()
+                .route("/", web::to(Self::hello))
+                .service(actix_files::Files::new("/git", "/home/code").show_files_listing())
+        })
+        .bind(("0.0.0.0", 8080))
+        .expect("")
+        .run()
+        .await
+        .expect("")
     }
 
     async fn handle_request(
         req: actix_web::HttpRequest,
-    ) -> std::result::Result<actix_files::NamedFile, actix_web::Error> {
-        todo!()
+    ) -> actix_web::Result<actix_files::NamedFile> {
+        let path: std::path::PathBuf = req.match_info().query("filename").parse().unwrap();
+        Ok(NamedFile::open(path)?)
+    }
+
+    async fn hello() -> impl Responder {
+        HttpResponse::Ok().body("Hello world!")
     }
 }
