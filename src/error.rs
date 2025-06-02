@@ -1,6 +1,23 @@
-pub struct Error {
-    code: String,
-    msg: String,
+use snafu::prelude::*;
+
+#[derive(Debug, Snafu)]
+#[snafu(visibility(pub))]
+pub enum Error {
+    #[snafu(display("Unable to read configuration from {}", message))]
+    ScriptExec {
+        source: std::io::Error,
+        message: String,
+    },
+    #[snafu(display("parse config failed {message}"))]
+    ConfigFileRead {
+        source: std::io::Error,
+        message: String,
+    },
+    #[snafu(display("parse config failed {message}"))]
+    ConfigParse {
+        source: serde_yml::Error,
+        message: String,
+    },
 }
 
 // impl std::error::Error for Error {
