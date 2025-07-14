@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
+            "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/target/debug/luna-sync",
-            "args": ["--config", "${workspaceFolde}/conf/config.yaml"],
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb"
+            "name": "Cargo launch",
+            "cargo": {
+                "args": [
+                    "build",
+                ]
+            },
+            "args": ["--config", "/home/code/projects/luna-sync/conf/config.yaml"]
         }
 
     ]

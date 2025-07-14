@@ -96,6 +96,17 @@ impl TaskServer {
     }
 }
 
+struct TaskManager {
+    tasks: HashMap<String, Box<dyn Executor>>
+}
+
+static TASK_MANAGER : TaskManager= TaskManager::new_task_manager();
+impl TaskManager {
+    fn new_task_manager() -> TaskManager {
+        todo!()
+    }
+}
+
 #[async_trait]
 trait Executor {
     fn key(&self) -> String;

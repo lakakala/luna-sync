@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use snafu::ResultExt;
-use std::{fs, sync::Arc};
-
+use std::{collections::HashMap, fs, sync::Arc};
+use serde_yml::Value;
 use crate::{error, result};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -55,14 +55,15 @@ pub enum TaskType {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TaskConfig {
     key: String,
-    task_type: TaskType,
+    task_type: String,
+    rest_params: HashMap<String, serde_yml::Value>,
 }
 
 impl TaskConfig {
     pub fn get_key(&self) -> &String {
         return &self.key;
     }
-    pub fn get_task_type(&self) -> &TaskType {
+    pub fn get_task_type(&self) -> &String {
         return &self.task_type;
     }
 }

@@ -2,6 +2,7 @@ script_path: /home/code/luna_sync_data/scripts
 script_log_path: /home/code/luna_sync_data/scripts_logs
 tasks:
   - type: git
+    key: docker-repo
     upstream_url: https://github.com/lakakala/docker-repo.git
     timeout_in_second: 60
     proxy: http://192.168.124.200:7890
